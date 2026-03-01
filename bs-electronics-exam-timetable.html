@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BS Electronics – Exam Timetable (Spring 2026)</title>
+  <style>
+    /* ── Reset & Base ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      padding: 24px 16px 48px;
+    }
+
+    /* ── Header ─────────────────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+      color: #fff;
+      border-radius: 12px;
+      padding: 32px 28px 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.25);
+    }
+    header h1 { font-size: 1.9rem; font-weight: 700; letter-spacing: .5px; }
+    header p  { margin-top: 6px; font-size: .95rem; opacity: .85; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .badge {
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: .8rem;
+      font-weight: 600;
+    }
+
+    /* ── Legend ─────────────────────────────────────────────── */
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 10px;
+      margin-bottom: 28px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: .83rem; font-weight: 600;
+    }
+    .dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+
+    /* ── Semester blocks ────────────────────────────────────── */
+    .semester-section {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+      margin-bottom: 36px;
+      overflow: hidden;
+    }
+    .semester-header {
+      padding: 14px 22px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sem-badge {
+      background: rgba(255,255,255,.22);
+      border-radius: 999px;
+      padding: 2px 12px;
+      font-size: .78rem;
+    }
+
+    /* ── Table ───────────────────────────────────────────────── */
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      background: #edf2f7;
+      padding: 10px 14px;
+      text-align: left;
+      font-size: .82rem;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: #4a5568;
+      border-bottom: 2px solid #cbd5e0;
+    }
+    tbody tr { transition: background .15s; }
+    tbody tr:hover { background: #f7fafc; }
+    tbody td {
+      padding: 11px 14px;
+      font-size: .88rem;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+
+    /* ── Row colour strips ──────────────────────────────────── */
+    .strip { width: 4px; height: 100%; border-radius: 2px; }
+    td.strip-cell { padding: 0; width: 6px; }
+
+    /* ── Subject chip ───────────────────────────────────────── */
+    .subject-chip {
+      display: inline-block;
+      background: #ebf8ff;
+      color: #2b6cb0;
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: .8rem;
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    /* ── Time pill ──────────────────────────────────────────── */
+    .time-pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: .8rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .morning  { background: #fefcbf; color: #744210; }
+    .afternoon { background: #fed7aa; color: #7b341e; }
+
+    /* ── Room badge ─────────────────────────────────────────── */
+    .room {
+      display: inline-block;
+      background: #e9d8fd;
+      color: #553c9a;
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: .78rem;
+      font-weight: 600;
+    }
+
+    /* ── Notes banner ───────────────────────────────────────── */
+    .notes {
+      background: #fff5f5;
+      border-left: 4px solid #fc8181;
+      border-radius: 0 8px 8px 0;
+      padding: 16px 20px;
+      margin: 0 0 36px;
+      font-size: .88rem;
+      line-height: 1.7;
+    }
+    .notes strong { color: #c53030; }
+    .notes ul { margin-top: 8px; padding-left: 20px; }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      text-align: center;
+      font-size: .78rem;
+      color: #718096;
+      margin-top: 24px;
+    }
+
+    /* ── Colour palette per semester ─────────────────────────── */
+    .s1 { background: #2b6cb0; }
+    .s2 { background: #276749; }
+    .s3 { background: #6b46c1; }
+    .s4 { background: #c05621; }
+    .s5 { background: #2c7a7b; }
+    .s6 { background: #822727; }
+    .s7 { background: #285e61; }
+    .s8 { background: #553c9a; }
+
+    .strip-s1 { background: #2b6cb0; }
+    .strip-s2 { background: #276749; }
+    .strip-s3 { background: #6b46c1; }
+    .strip-s4 { background: #c05621; }
+    .strip-s5 { background: #2c7a7b; }
+    .strip-s6 { background: #822727; }
+    .strip-s7 { background: #285e61; }
+    .strip-s8 { background: #553c9a; }
+
+    @media (max-width: 640px) {
+      header h1 { font-size: 1.35rem; }
+      thead th, tbody td { padding: 8px 10px; font-size: .8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════ HEADER ════════════════════ -->
+<header>
+  <h1>&#128218; BS Electronics – Semester Exam Timetable</h1>
+  <p>Spring 2026 &nbsp;|&nbsp; Examination Period: <strong>10 March – 4 April 2026</strong></p>
+  <div class="badge-row">
+    <span class="badge">Department of Electronics</span>
+    <span class="badge">All 8 Semesters</span>
+    <span class="badge">Morning: 09:00–11:00</span>
+    <span class="badge">Afternoon: 13:00–15:00</span>
+  </div>
+</header>
+
+<!-- ════════════════════ IMPORTANT NOTES ════════════════════ -->
+<div class="notes">
+  <strong>&#9888; Important Instructions for Students</strong>
+  <ul>
+    <li>Report to the examination hall <strong>30 minutes</strong> before the scheduled time.</li>
+    <li>Bring your valid <strong>Student ID Card</strong> and <strong>Admit Card</strong>.</li>
+    <li>Mobile phones and smart devices are <strong>strictly prohibited</strong> inside the hall.</li>
+    <li>Calculators allowed: <strong>scientific (non-programmable)</strong> only.</li>
+    <li>Any changes to the schedule will be announced on the <strong>official notice board</strong>.</li>
+  </ul>
+</div>
+
+<!-- ════════════════════ SEMESTER 1 ════════════════════ -->
+<div class="semester-section">
+  <div class="semester-header s1">
+    &#128218; Semester 1 &nbsp;<span class="sem-badge">1st Year – Fall Entry</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th>
+        <th>Day</th>
+        <th>Subject</th>
+        <th>Code</th>
+        <th>Time</th>
+        <th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strip-cell"><div class="strip-s1">&nbsp;</div></td>
+        <td>10 Mar 2026</td><td>Tuesday</td>
+        <td>Mathematics I (Calculus)</td>
+        <td><span class="subject-chip">EL-101</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall A</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s1">&nbsp;</div></td>
+        <td>12 Mar 2026</td><td>Thursday</td>
+        <td>Applied Physics</td>
+        <td><span class="subject-chip">EL-102</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall A</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s1">&nbsp;</div></td>
+        <td>14 Mar 2026</td><td>Saturday</td>
+        <td>Introduction to Computing</td>
+        <td><span class="subject-chip">EL-103</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Lab 1</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s1">&nbsp;</div></td>
+        <td>17 Mar 2026</td><td>Tuesday</td>
+        <td>Functional English</td>
+        <td><span class="subject-chip">EL-104</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall B</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s1">&nbsp;</div></td>
+        <td>19 Mar 2026</td><td>Thursday</td>
+        <td>Pakistan Studies</td>
+        <td><span class="subject-chip">EL-105</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall B</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════ SEMESTER 2 ════════════════════ -->
+<div class="semester-section">
+  <div class="semester-header s2">
+    &#128218; Semester 2 &nbsp;<span class="sem-badge">1st Year – Spring</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th><th>Day</th><th>Subject</th><th>Code</th><th>Time</th><th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strip-cell"><div class="strip-s2">&nbsp;</div></td>
+        <td>10 Mar 2026</td><td>Tuesday</td>
+        <td>Mathematics II (Linear Algebra)</td>
+        <td><span class="subject-chip">EL-201</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s2">&nbsp;</div></td>
+        <td>12 Mar 2026</td><td>Thursday</td>
+        <td>Circuit Analysis</td>
+        <td><span class="subject-chip">EL-202</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s2">&nbsp;</div></td>
+        <td>14 Mar 2026</td><td>Saturday</td>
+        <td>Electronic Devices &amp; Circuits</td>
+        <td><span class="subject-chip">EL-203</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s2">&nbsp;</div></td>
+        <td>17 Mar 2026</td><td>Tuesday</td>
+        <td>Technical Writing</td>
+        <td><span class="subject-chip">EL-204</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall D</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s2">&nbsp;</div></td>
+        <td>19 Mar 2026</td><td>Thursday</td>
+        <td>Applied Chemistry</td>
+        <td><span class="subject-chip">EL-205</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall D</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════ SEMESTER 3 ════════════════════ -->
+<div class="semester-section">
+  <div class="semester-header s3">
+    &#128218; Semester 3 &nbsp;<span class="sem-badge">2nd Year – Fall</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th><th>Day</th><th>Subject</th><th>Code</th><th>Time</th><th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strip-cell"><div class="strip-s3">&nbsp;</div></td>
+        <td>11 Mar 2026</td><td>Wednesday</td>
+        <td>Mathematics III (Diff. Equations)</td>
+        <td><span class="subject-chip">EL-301</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall A</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s3">&nbsp;</div></td>
+        <td>13 Mar 2026</td><td>Friday</td>
+        <td>Electronics I (Amplifiers)</td>
+        <td><span class="subject-chip">EL-302</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall A</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s3">&nbsp;</div></td>
+        <td>16 Mar 2026</td><td>Monday</td>
+        <td>Digital Logic Design</td>
+        <td><span class="subject-chip">EL-303</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall B</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s3">&nbsp;</div></td>
+        <td>18 Mar 2026</td><td>Wednesday</td>
+        <td>Electromagnetic Field Theory</td>
+        <td><span class="subject-chip">EL-304</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall B</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s3">&nbsp;</div></td>
+        <td>20 Mar 2026</td><td>Friday</td>
+        <td>Engineering Drawing &amp; CAD</td>
+        <td><span class="subject-chip">EL-305</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Lab 2</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════ SEMESTER 4 ════════════════════ -->
+<div class="semester-section">
+  <div class="semester-header s4">
+    &#128218; Semester 4 &nbsp;<span class="sem-badge">2nd Year – Spring</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th><th>Day</th><th>Subject</th><th>Code</th><th>Time</th><th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strip-cell"><div class="strip-s4">&nbsp;</div></td>
+        <td>11 Mar 2026</td><td>Wednesday</td>
+        <td>Electronics II (Op-Amps &amp; Filters)</td>
+        <td><span class="subject-chip">EL-401</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s4">&nbsp;</div></td>
+        <td>13 Mar 2026</td><td>Friday</td>
+        <td>Signals &amp; Systems</td>
+        <td><span class="subject-chip">EL-402</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s4">&nbsp;</div></td>
+        <td>16 Mar 2026</td><td>Monday</td>
+        <td>Microprocessors &amp; Assembly</td>
+        <td><span class="subject-chip">EL-403</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Lab 1</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s4">&nbsp;</div></td>
+        <td>18 Mar 2026</td><td>Wednesday</td>
+        <td>Data Structures &amp; Algorithms</td>
+        <td><span class="subject-chip">EL-404</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall D</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s4">&nbsp;</div></td>
+        <td>20 Mar 2026</td><td>Friday</td>
+        <td>Engineering Economics</td>
+        <td><span class="subject-chip">EL-405</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall D</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════ SEMESTER 5 ════════════════════ -->
+<div class="semester-section">
+  <div class="semester-header s5">
+    &#128218; Semester 5 &nbsp;<span class="sem-badge">3rd Year – Fall</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th><th>Day</th><th>Subject</th><th>Code</th><th>Time</th><th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strip-cell"><div class="strip-s5">&nbsp;</div></td>
+        <td>23 Mar 2026</td><td>Monday</td>
+        <td>Control Systems</td>
+        <td><span class="subject-chip">EL-501</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall A</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s5">&nbsp;</div></td>
+        <td>25 Mar 2026</td><td>Wednesday</td>
+        <td>Digital Signal Processing</td>
+        <td><span class="subject-chip">EL-502</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall A</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s5">&nbsp;</div></td>
+        <td>27 Mar 2026</td><td>Friday</td>
+        <td>Communication Systems</td>
+        <td><span class="subject-chip">EL-503</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall B</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s5">&nbsp;</div></td>
+        <td>30 Mar 2026</td><td>Monday</td>
+        <td>VLSI Design</td>
+        <td><span class="subject-chip">EL-504</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Lab 3</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s5">&nbsp;</div></td>
+        <td>01 Apr 2026</td><td>Wednesday</td>
+        <td>Engineering Ethics &amp; Management</td>
+        <td><span class="subject-chip">EL-505</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall B</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════ SEMESTER 6 ════════════════════ -->
+<div class="semester-section">
+  <div class="semester-header s6">
+    &#128218; Semester 6 &nbsp;<span class="sem-badge">3rd Year – Spring</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th><th>Day</th><th>Subject</th><th>Code</th><th>Time</th><th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strip-cell"><div class="strip-s6">&nbsp;</div></td>
+        <td>23 Mar 2026</td><td>Monday</td>
+        <td>Power Electronics</td>
+        <td><span class="subject-chip">EL-601</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s6">&nbsp;</div></td>
+        <td>25 Mar 2026</td><td>Wednesday</td>
+        <td>Embedded Systems</td>
+        <td><span class="subject-chip">EL-602</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Lab 2</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s6">&nbsp;</div></td>
+        <td>27 Mar 2026</td><td>Friday</td>
+        <td>Antenna &amp; Wave Propagation</td>
+        <td><span class="subject-chip">EL-603</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s6">&nbsp;</div></td>
+        <td>30 Mar 2026</td><td>Monday</td>
+        <td>Optical Fiber Communications</td>
+        <td><span class="subject-chip">EL-604</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall D</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s6">&nbsp;</div></td>
+        <td>01 Apr 2026</td><td>Wednesday</td>
+        <td>Industrial Electronics</td>
+        <td><span class="subject-chip">EL-605</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall D</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════ SEMESTER 7 ════════════════════ -->
+<div class="semester-section">
+  <div class="semester-header s7">
+    &#128218; Semester 7 &nbsp;<span class="sem-badge">4th Year – Fall</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th><th>Day</th><th>Subject</th><th>Code</th><th>Time</th><th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strip-cell"><div class="strip-s7">&nbsp;</div></td>
+        <td>02 Apr 2026</td><td>Thursday</td>
+        <td>Digital Communications</td>
+        <td><span class="subject-chip">EL-701</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall A</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s7">&nbsp;</div></td>
+        <td>03 Apr 2026</td><td>Friday</td>
+        <td>RF &amp; Microwave Engineering</td>
+        <td><span class="subject-chip">EL-702</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall A</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s7">&nbsp;</div></td>
+        <td>04 Apr 2026</td><td>Saturday</td>
+        <td>Computer Networks</td>
+        <td><span class="subject-chip">EL-703</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall B</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s7">&nbsp;</div></td>
+        <td>06 Apr 2026</td><td>Monday</td>
+        <td>Wireless Communications</td>
+        <td><span class="subject-chip">EL-704</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall B</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s7">&nbsp;</div></td>
+        <td>07 Apr 2026</td><td>Tuesday</td>
+        <td>Elective I (IoT / Robotics)</td>
+        <td><span class="subject-chip">EL-705</span></td>
+        <td><span class="time-pill morning">09:00 – 11:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════ SEMESTER 8 ════════════════════ -->
+<div class="semester-section">
+  <div class="semester-header s8">
+    &#128218; Semester 8 &nbsp;<span class="sem-badge">4th Year – Spring (Final)</span>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th><th>Day</th><th>Subject</th><th>Code</th><th>Time</th><th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="strip-cell"><div class="strip-s8">&nbsp;</div></td>
+        <td>02 Apr 2026</td><td>Thursday</td>
+        <td>Project Management</td>
+        <td><span class="subject-chip">EL-801</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s8">&nbsp;</div></td>
+        <td>03 Apr 2026</td><td>Friday</td>
+        <td>Professional Engineering Practices</td>
+        <td><span class="subject-chip">EL-802</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall C</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s8">&nbsp;</div></td>
+        <td>04 Apr 2026</td><td>Saturday</td>
+        <td>Elective II (AI in Electronics)</td>
+        <td><span class="subject-chip">EL-803</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall D</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s8">&nbsp;</div></td>
+        <td>06 Apr 2026</td><td>Monday</td>
+        <td>Elective III (Biomedical Electronics)</td>
+        <td><span class="subject-chip">EL-804</span></td>
+        <td><span class="time-pill afternoon">13:00 – 15:00</span></td>
+        <td><span class="room">Hall D</span></td>
+      </tr>
+      <tr>
+        <td class="strip-cell"><div class="strip-s8">&nbsp;</div></td>
+        <td>07 Apr 2026</td><td>Tuesday</td>
+        <td>Final Year Project – Viva Voce</td>
+        <td><span class="subject-chip">EL-805</span></td>
+        <td><span class="time-pill afternoon">13:00 – 16:00</span></td>
+        <td><span class="room">Seminar Hall</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════ FOOTER ════════════════════ -->
+<footer>
+  <p>&#169; 2026 Department of Electronics &nbsp;|&nbsp; BS Electronics Program &nbsp;|&nbsp; All rights reserved</p>
+  <p style="margin-top:4px;">Generated: 1 March 2026 &nbsp;|&nbsp; Any discrepancy must be reported to the Examination Cell within 48 hours.</p>
+</footer>
+
+</body>
+</html>
