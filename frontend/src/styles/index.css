@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-surface-50 text-surface-900 dark:bg-surface-950 dark:text-surface-50;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700
+           transition-colors font-medium text-sm focus:outline-none focus:ring-2
+           focus:ring-primary-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 bg-surface-200 text-surface-700 rounded-lg hover:bg-surface-300
+           dark:bg-surface-700 dark:text-surface-200 dark:hover:bg-surface-600
+           transition-colors font-medium text-sm;
+  }
+
+  .btn-danger {
+    @apply px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700
+           transition-colors font-medium text-sm;
+  }
+
+  .card {
+    @apply bg-white dark:bg-surface-800 rounded-xl border border-surface-200
+           dark:border-surface-700 shadow-sm;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 border border-surface-300 dark:border-surface-600
+           rounded-lg bg-white dark:bg-surface-800 text-surface-900 dark:text-surface-100
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent
+           placeholder-surface-400 text-sm;
+  }
+
+  .label {
+    @apply block text-sm font-medium text-surface-700 dark:text-surface-300 mb-1;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+           text-surface-600 dark:text-surface-400 hover:bg-surface-100
+           dark:hover:bg-surface-800 transition-colors;
+  }
+
+  .sidebar-link-active {
+    @apply bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400;
+  }
+}
